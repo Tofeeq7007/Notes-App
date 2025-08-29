@@ -3,16 +3,13 @@ import z from 'zod';
 import { User } from "../db";
 
 export const Validation = async (name:string,email:string,dob:string ,req:Request,res:Response)=>{
-    console.log("Hi 1")
     if(!dob) {
         return res.status(401).json({message:'please enter your date of birth'});
     }
-    console.log("Hi 2")
     const CheckUser = z.object({
         name:z.string().min(2,"Username must be at least 2 char").max(10 ,"username not longer than 10 char"),
         email:z.string().email("Invalid Email Address"),
     })
-    console.log("Hi 3")
 
     const userInfo = CheckUser.safeParse(req.body);
     if(!userInfo.success){
