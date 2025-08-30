@@ -3,6 +3,7 @@ interface ButtonProps{
     text:string,
     onClick?:()=>void
     size:"sm" | "md"
+    hidden?:boolean
 }
 
 const sizeClass = {
@@ -12,6 +13,6 @@ const sizeClass = {
 
 export const Button = (props:ButtonProps)=>{
     return <>
-        <button className={`m-1 font-inter font-semibold text-lg ${sizeClass[props.size]}  bg-[#367AFF] rounded-md p-[16px] text-center text-white  `}>{props.text}</button>
+        <button onClick={props.onClick ? props.onClick : ()=>{}} className={` ${props.hidden && 'hidden'} m-1 font-inter font-semibold transition active:scale-110 text-lg ${sizeClass[props.size]}  bg-[#367AFF] rounded-md p-[16px] text-center text-white  `}>{props.text}</button>
     </>
 }

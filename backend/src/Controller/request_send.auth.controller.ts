@@ -10,7 +10,7 @@ export const request_for_otp = async (req:Request,res:Response)=>{
     }
     const check = await User.findOne({email});
     if(!check){
-        return res.json({
+        return res.status(401).json({
             message:"Invalid Email"
         })
     }

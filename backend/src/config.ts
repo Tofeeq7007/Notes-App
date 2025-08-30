@@ -5,3 +5,4 @@ export const My_Password = process.env.MY_Password as string;
 export const MONGO_URL = process.env.MONGODB_URL as string;
 export const JWT_SECRET = process.env.JWT_SECRET as string;
 export const PORT = process.env.PORT as string;
+export const FRONTEND_URL = process.env.FRONTEND_URL as string;

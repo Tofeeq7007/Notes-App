@@ -1,7 +1,8 @@
 
 
 interface Input_props{
-    label:string,
+    ref?:React.Ref<HTMLInputElement>
+    label?:string,
     type:string,
     placeholder?:string,
     size:"sm" | "md"
@@ -24,7 +25,7 @@ export const Input_field = (props:Input_props)=>{
         <div className="relative">
 
         <br></br>
-        <input  className={ ` ${props.type=='date' ? for_date : ""} peer ${variantClass.default} ${variantClass.outline } ${sizeClass[props.size]}]}`} type={props.type} placeholder={props.placeholder} />
+        <input ref={props.ref} id={`${props.label}`} name={`${props.label}`} className={ ` ${props.type=='date' ? for_date : ""} peer ${variantClass.default} ${variantClass.outline } ${sizeClass[props.size]}]}`} type={props.type} placeholder={props.placeholder} />
         <label className='text-md bg-white  px-1 absolute peer-focus:text-[#367AFF] top-2.5 left-3 text-[#D9D9D9]'>{props.label}</label>  
         </div>
     </>

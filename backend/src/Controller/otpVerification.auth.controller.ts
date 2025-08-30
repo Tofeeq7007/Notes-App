@@ -9,7 +9,7 @@ export const verify_otp = async (req:Request,res:Response)=>{
     }
     const check = await User.findOne({email});
     if(!check){
-        return res.json({
+        return res.status(401).json({
             message:"Invalid Email"
         })
     }
@@ -18,7 +18,7 @@ export const verify_otp = async (req:Request,res:Response)=>{
     },JWT_SECRET,{expiresIn:"15m"});
     
     if(check.OtpHash !== otp){
-        return res.json({
+        return res.status(401).json({
             message:"Invalid OTP"
         })
     };    

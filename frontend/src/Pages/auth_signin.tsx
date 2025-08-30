@@ -3,6 +3,9 @@ import window_img from '../assets/images/window.jpg'
 import { Signin } from "../component/sigin"
 
 export const Auth_signin = () => {
+    
+
+
     return (
         <div className="flex  gap-2.5">
             <Signin/>

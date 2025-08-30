@@ -1,8 +1,81 @@
+import {  useRef, useState } from "react"
 import { Button } from "./ui/button"
 import { Input_field } from "./ui/Input"
-
+import { SendOtp, VerifyOTP } from "../service/helper"
+import { useNavigate } from "react-router-dom"
+import { isAxiosError } from "axios"
 // import window_img from "../assets/images/window.jpg";
 export const Signin = () => {
+    const email = useRef<HTMLInputElement>(null);
+    const otp = useRef<HTMLInputElement>(null);
+    const [otp_field, set_otp_field] = useState(false);
+    const [error , setError] = useState("");
+    const navigate = useNavigate();
+
+    async function ActivateOtp(){
+        const Email = email.current?.value;
+        if( !Email || Email.trim()==""){
+            setError("Enter valid email");
+            return;
+        }
+        try{
+            if(!otp_field) set_otp_field(true);
+            // email verfiy
+            const otpStatus = await SendOtp(Email as string);
+            console.log( "OTP Status :",otpStatus.message);
+            alert(`OTP Sent on your Email`);
+        
+        }catch(e){
+            set_otp_field(false);
+            console.log("Activation Otp Errop :");
+            if (isAxiosError(e)) {
+                if (e.response && e.response.data && e.response.data.message) {
+                    setError(e.response.data.message);
+                } else {
+                    setError("An unexpected API error occurred.");
+                }
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+                console.error("An unexpected error:", e);
+            }            
+        }
+
+    }
+
+
+    async function SubmitOTP(){
+        const Email = email.current?.value;
+        const Otp = otp.current?.value;
+        if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
+
+        try{
+
+            const data = await VerifyOTP(Email as string,Otp as string);
+
+            console.log("Otp Sahi daala " , data)    
+            localStorage.setItem('token',data.message.token);
+            
+            navigate("/Dashboard");
+        }
+        catch(e){
+            console.log("submit otp error");
+            // console.error(err);
+            if (isAxiosError(e)) {
+                if (e.response && e.response.data && e.response.data.message) {
+                    setError(e.response.data.message);
+                } else {
+                    setError("An unexpected API error occurred.");
+                }
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+                console.error("An unexpected error:", e);
+            }                  
+        }
+    }
+
+    if(error) setTimeout(()=>{setError("")},3000);
+
+
     return (
         <div className="flex flex-col  items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
@@ -31,8 +104,21 @@ export const Signin = () => {
 
 
                     <div className="flex flex-col mx-1 items-center gap-5">
-                        <Input_field type='email' placeholder='Email Address' size='md' label='Email'/>
-                        <Button text="Sign in" size="md"/>
+                        {error && <div className="bg-red-50 border border-red-500 text-red-900 px-38 py-2  rounded relative" role="alert">{error}</div>}
+                        <Input_field ref={email} type='email' placeholder='Email Address' size='md' label='Email'/>
+                        {/*  */}
+                        <div className={otp_field ? 'block':'hidden'}>
+                            <Input_field ref={otp} type='password' placeholder='OTP' size='md'/>
+                            <button onClick={async ()=> SendOtp(email.current?.value as string)} className="font-inter underline font-medium cursor-pointer mt-3 text-base leading-[150%] text-[#367AFF]">Resend OTP</button>
+                            <div className="flex gap-5 justify-start items-center mt-3">
+                                <input className="w-[15px] h-[15px]"  type="checkbox" id="rememberMe" name="rememberMe" value="Remember Me"/>
+                                <p className="font-inter font-semibold text-sm leading-[150%] text-black">Keep me logged in</p>
+                                    
+                            </div>    
+                        </div>
+                        {/*  */}
+                        <Button hidden={otp_field} onClick={()=>ActivateOtp()} text="Sign in" size="md"/>
+                        <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign in" size="md"/>
                     </div>
                     <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Need an account? <span className="text-[#367AFF] cursor-pointer underline">Create one</span></div>
                 </div>
