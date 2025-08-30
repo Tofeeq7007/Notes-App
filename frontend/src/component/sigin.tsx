@@ -112,15 +112,14 @@ export const Signin = () => {
                             <button onClick={async ()=> SendOtp(email.current?.value as string)} className="font-inter underline font-medium cursor-pointer mt-3 text-base leading-[150%] text-[#367AFF]">Resend OTP</button>
                             <div className="flex gap-5 justify-start items-center mt-3">
                                 <input className="w-[15px] h-[15px]"  type="checkbox" id="rememberMe" name="rememberMe" value="Remember Me"/>
-                                <p className="font-inter font-semibold text-sm leading-[150%] text-black">Keep me logged in</p>
-                                    
+                                <p className="font-inter font-semibold text-sm leading-[150%] text-black">Keep me logged in</p>                                    
                             </div>    
                         </div>
                         {/*  */}
                         <Button hidden={otp_field} onClick={()=>ActivateOtp()} text="Sign in" size="md"/>
                         <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign in" size="md"/>
                     </div>
-                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Need an account? <span className="text-[#367AFF] cursor-pointer underline">Create one</span></div>
+                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Need an account? <span onClick={() => navigate('/signup')} className="text-[#367AFF] cursor-pointer underline">Create one</span></div>
                 </div>
             </div>
         </div>

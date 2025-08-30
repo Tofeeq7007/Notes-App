@@ -1,8 +1,110 @@
+import { useRef, useState } from "react"
 import { Button } from "./ui/button"
 import { Input_field } from "./ui/Input"
+import { isAxiosError } from "axios";
+import { SendOtp, VerifyOTP } from "../service/helper";
+import { useNavigate } from "react-router-dom";
+import {  signup } from "../api/auth_api";
 
 // import window_img from "../assets/images/window.jpg";
 export const Signup = () => {
+    const nameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const dobRef = useRef<HTMLInputElement>(null);
+    const [error,setError] = useState("");
+    const [otp_field, set_otp_field] = useState(false);
+    const otp = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+
+    async function ActivateOtp(){
+        const Email = emailRef.current?.value;
+        const dob = dobRef.current?.value;
+        const name = nameRef.current?.value;
+        if( !Email || Email.trim()=="" || !name || name.trim()=="" || !dob || dob.trim() == "" ){
+            setError("Please Fill all Fields");
+            return;
+        }
+        
+        try{
+            const signin_response = await signup(name,Email,dob);
+            console.log("Signup Response :",signin_response.message);
+        }
+        catch(e){
+            if (isAxiosError(e)) {
+                if (e.response && e.response.data && e.response.data.Error_Detail) {
+                    
+                    setError(e.response.data.Error_Detail.name || e.response.data.Error_Detail.dob || e.response.data.Error_Detail.email);                    
+                }
+                else {
+                    setError("An unexpected API error occurred.");
+                }
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+                console.error("An unexpected error:", e);
+            }      
+            return;      
+        }
+
+        try{
+
+
+            if(!otp_field) set_otp_field(true);
+            // email verfiy
+            const otpStatus = await SendOtp(Email as string);
+            console.log( "OTP Status :",otpStatus.message);
+            alert(`OTP Sent on your Email`);
+        
+        }catch(e){
+            set_otp_field(false);
+            console.log("Activation Otp Errop :");
+            if (isAxiosError(e)) {
+                if (e.response && e.response.data && e.response.data.message) {
+                    setError(e.response.data.message);
+                } else {
+                    setError("An unexpected API error occurred.");
+                }
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+                console.error("An unexpected error:", e);
+            }            
+        }
+
+    }
+    async function SubmitOTP(){
+        const Email = emailRef.current?.value;
+        const Otp = otp.current?.value;
+        if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
+
+        try{
+
+            const data = await VerifyOTP(Email as string,Otp as string);
+
+            console.log("Otp Sahi daala " , data)    
+            localStorage.setItem('token',data.message.token);
+            
+            navigate("/Dashboard");
+        }
+        catch(e){
+            console.log("submit otp error");
+            // console.error(err);
+            if (isAxiosError(e)) {
+                if (e.response && e.response.data && e.response.data.message) {
+                    setError(e.response.data.message);
+                } else {
+                    setError("An unexpected API error occurred.");
+                }
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+                console.error("An unexpected error:", e);
+            }                  
+        }
+    }
+
+    if(error) setTimeout(()=>{setError("")},3000);
+
+
+
+
     return (
         <div className="flex flex-col  items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
@@ -23,7 +125,7 @@ export const Signup = () => {
                 </div>
             <div className="flex flex-col sm:gap-5  justify-center items-center h-screen bg-white">
 
-                <div className="flex flex-col sm:gap-5 md:gap-8  md:mt-[100px]">
+                <div className="flex flex-col sm:gap-5 md:gap-5  md:mt-[100px]">
 
                     <div className="max-md:hidden  flex flex-col sm:items-center md:items-start gap-3">
                         <h2 className="font-inter max-md:text-center font-bold text-[40px] leading-[110%] tracking-[-4%]">Sign up</h2>
@@ -31,13 +133,22 @@ export const Signup = () => {
                     </div>
 
 
-                    <div className="flex flex-col mx-1 items-center gap-5">
-                        <Input_field type='Your Name' placeholder='Username' size='md' label='Your Name'/>
-                        <Input_field type='date' placeholder='m' size='md' label='Date Of Birth'/>
-                        <Input_field type='email' placeholder='Email Address' size='md' label='Email'/>
-                        <Button text="Get Otp" size="md"/>
+                    <div>
+                        {error && <div className=" bg-red-50 border ml-3 mx-1 border-red-500 text-red-900 px-32 py-2  rounded relative" role="alert">{error}</div>}
+                        <div className="flex flex-col mx-1 items-center gap-4">
+                            <Input_field ref={nameRef} type='Your Name' placeholder='Username' size='md' label='Your Name'/>
+                            <Input_field ref={dobRef} type='date' placeholder='m' size='md' label='Date Of Birth'/>
+                            <Input_field ref={emailRef} type='email' placeholder='Email Address' size='md' label='Email'/>
+
+                            <div className={otp_field ? 'block':'hidden'}>
+                                <Input_field ref={otp} type='password' placeholder='OTP' size='md'/>
+                            </div>                            
+
+                            <Button onClick={() =>ActivateOtp()} hidden={otp_field} text="Get Otp" size="md"/>
+                            <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign up" size="md"/>
+                        </div>
                     </div>
-                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Already have an account? <span className="text-[#367AFF] cursor-pointer underline">Sign in</span></div>
+                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Already have an account? <span onClick={()=>navigate('/')} className="text-[#367AFF] cursor-pointer underline">Sign in</span></div>
                 </div>
             </div>
         </div>
