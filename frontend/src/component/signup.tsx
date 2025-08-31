@@ -52,7 +52,6 @@ export const Signup = () => {
             // email verfiy
             const otpStatus = await SendOtp(Email as string);
             console.log( "OTP Status :",otpStatus.message);
-            toast.success(`OTP Sent on your Email`);
         
         }catch(e){
             set_otp_field(false);
@@ -137,14 +136,14 @@ export const Signup = () => {
                             <Input_field ref={dobRef} type='date' placeholder='m' size='md' label='Date Of Birth'/>
                             <Input_field ref={emailRef} type='email' placeholder='Email Address' size='md' label='Email'/>
 
-                            <div className={otp_field ? 'block':'hidden'}>
+                            <div className={otp_field ? 'block':'hidden mt-3'}>
                                 <Input_field ref={otp} type='password' placeholder='OTP' size='md'/>
                             </div>                            
                             <Button onClick={() =>ActivateOtp()} hidden={otp_field} text="Get Otp" size="md"/>
                             <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign up" size="md"/>
+                            <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Already have an account? <span onClick={()=>navigate('/')} className="text-[#367AFF] cursor-pointer underline">Sign in</span></div>
                         </div>
                     </div>
-                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Already have an account? <span onClick={()=>navigate('/')} className="text-[#367AFF] cursor-pointer underline">Sign in</span></div>
                 </div>
             </div>
         </div>
