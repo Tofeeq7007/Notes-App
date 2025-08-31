@@ -10,7 +10,7 @@ interface Input_props{
 
 const sizeClass = {
     sm: "w-[343px]  h-[52px] ",
-    md: "w-[399px]  h-[59px] md:h-[59px]",
+    md: "w-[370px]  h-[59px] md:h-[59px]",
 }
 
 
