@@ -24,8 +24,6 @@ export const AllNotes = () =>{
     // console.log("data = ",data);
     
     return (<>
-        <Notes key={"123"} text={"Notes 1"} id={"122"}/>
-        <Notes key={"126"} text={"Notes 2"} id={"122"}/> 
         {data?.content?.map((item:Content)=>(
             <Notes key={item._id} text={item.title} id={item._id}/>
         ))}
