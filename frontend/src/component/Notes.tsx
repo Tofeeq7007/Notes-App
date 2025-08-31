@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteContent } from "../api/content.api";
+import { toast } from "react-toastify";
 
 interface NotesProps{
     key:string
@@ -15,7 +16,7 @@ export const Notes = (props:NotesProps)=>{
         queryClient.invalidateQueries({ queryKey: ["content"] });
 
             console.log(data);
-            alert(data.message);
+            toast.success(data.message);
         },
         onError: (e) => {
             console.log("Delete mai eeror")

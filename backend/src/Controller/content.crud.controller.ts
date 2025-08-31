@@ -17,9 +17,11 @@ export const addNote = async(req:Request , res:Response)=>{
         title:data,
         userId:user_id
     })
-    // console.log("Current Content id =",currentContent._id);
+    console.log("Current Content id =",currentContent._id);
     res.json({
-        message:"note added successfully"
+        message:"note added successfully",
+        currentContentId:currentContent._id,
+        title:currentContent.title
     })
 
     

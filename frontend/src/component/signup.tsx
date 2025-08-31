@@ -5,13 +5,13 @@ import { isAxiosError } from "axios";
 import { SendOtp, VerifyOTP } from "../service/helper";
 import { useNavigate } from "react-router-dom";
 import {  signup } from "../api/auth_api";
-
+import {toast} from "react-toastify"
 // import window_img from "../assets/images/window.jpg";
 export const Signup = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const dobRef = useRef<HTMLInputElement>(null);
-    const [error,setError] = useState("");
+    // const [error,setError] = useState("");
     const [otp_field, set_otp_field] = useState(false);
     const otp = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ export const Signup = () => {
         const dob = dobRef.current?.value;
         const name = nameRef.current?.value;
         if( !Email || Email.trim()=="" || !name || name.trim()=="" || !dob || dob.trim() == "" ){
-            setError("Please Fill all Fields");
+            toast.error("Please Fill all Fields");
             return;
         }
         
@@ -33,14 +33,14 @@ export const Signup = () => {
             if (isAxiosError(e)) {
                 if (e.response && e.response.data && e.response.data.Error_Detail) {
                     
-                    setError(e.response.data.Error_Detail.name || e.response.data.Error_Detail.dob || e.response.data.Error_Detail.email);                    
+                    toast.error(e.response.data.Error_Detail.name || e.response.data.Error_Detail.dob || e.response.data.Error_Detail.email);                    
                 }
                 else {
-                    setError("An unexpected API error occurred.");
+                    toast.error(e.response?.data.message || "An unexpected API error occurred.");
                 }
             } else {
-                setError("An unexpected error occurred. Please try again.");
-                console.error("An unexpected error:", e);
+                toast.error("An unexpected error occurred. Please try again.");
+                // console.error("An unexpected error:", e);
             }      
             return;      
         }
@@ -52,20 +52,18 @@ export const Signup = () => {
             // email verfiy
             const otpStatus = await SendOtp(Email as string);
             console.log( "OTP Status :",otpStatus.message);
-            alert(`OTP Sent on your Email`);
+            toast.success(`OTP Sent on your Email`);
         
         }catch(e){
             set_otp_field(false);
-            console.log("Activation Otp Errop :");
             if (isAxiosError(e)) {
                 if (e.response && e.response.data && e.response.data.message) {
-                    setError(e.response.data.message);
+                    toast.error(e.response.data.message);
                 } else {
-                    setError("An unexpected API error occurred.");
+                    toast.error("An unexpected API error occurred.");
                 }
             } else {
-                setError("An unexpected error occurred. Please try again.");
-                console.error("An unexpected error:", e);
+                toast.error("An unexpected error occurred. Please try again.");
             }            
         }
 
@@ -73,7 +71,7 @@ export const Signup = () => {
     async function SubmitOTP(){
         const Email = emailRef.current?.value.toLowerCase();
         const Otp = otp.current?.value;
-        if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
+        if(Otp==""||!Otp){toast.error("Enter Valid OTP");return;}
 
         try{
 
@@ -82,28 +80,26 @@ export const Signup = () => {
             console.log("Otp Sahi daala " , data)    
             localStorage.setItem('token',data.token);
             localStorage.setItem('name',data.name);
-            localStorage.setItem('email',data.email);            
+            localStorage.setItem('email',data.email);    
+            
+            toast.success(`Signup Successful`);
             navigate("/Dashboard");
         }
         catch(e){
-            console.log("submit otp error");
+            // console.log("submit otp error");
             // console.error(err);
             if (isAxiosError(e)) {
                 if (e.response && e.response.data && e.response.data.message) {
-                    setError(e.response.data.message);
+                    toast.error(e.response.data.message);
                 } else {
-                    setError("An unexpected API error occurred.");
+                    toast.error("An unexpected API error occurred.");
                 }
             } else {
-                setError("An unexpected error occurred. Please try again.");
-                console.error("An unexpected error:", e);
+                toast.error("An unexpected error occurred. Please try again.");
+                // console.error("An unexpected error:", e);
             }                  
         }
     }
-
-    if(error) setTimeout(()=>{setError("")},3000);
-
-
 
 
     return (
@@ -135,7 +131,7 @@ export const Signup = () => {
 
 
                     <div>
-                        {error && <div className=" bg-red-50 border ml-3 mx-1 border-red-500 text-red-900 px-32 py-2  rounded relative" role="alert">{error}</div>}
+                        {/* {error && <div className=" bg-red-50 border ml-3 mx-1 border-red-500 text-red-900 px-32 py-2  rounded relative" role="alert">{error}</div>} */}
                         <div className="flex flex-col mx-1 items-center gap-4">
                             <Input_field ref={nameRef} type='Your Name' placeholder='Username' size='md' label='Your Name'/>
                             <Input_field ref={dobRef} type='date' placeholder='m' size='md' label='Date Of Birth'/>
@@ -144,7 +140,6 @@ export const Signup = () => {
                             <div className={otp_field ? 'block':'hidden'}>
                                 <Input_field ref={otp} type='password' placeholder='OTP' size='md'/>
                             </div>                            
-
                             <Button onClick={() =>ActivateOtp()} hidden={otp_field} text="Get Otp" size="md"/>
                             <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign up" size="md"/>
                         </div>

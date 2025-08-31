@@ -4,18 +4,19 @@ import { Input_field } from "./ui/Input"
 import { SendOtp, VerifyOTP } from "../service/helper"
 import { useNavigate } from "react-router-dom"
 import { isAxiosError } from "axios"
+import {toast} from "react-toastify";
 // import window_img from "../assets/images/window.jpg";
 export const Signin = () => {
     const email = useRef<HTMLInputElement>(null);
     const otp = useRef<HTMLInputElement>(null);
     const [otp_field, set_otp_field] = useState(false);
-    const [error , setError] = useState("");
+    // const [error , setError] = useState("");
     const navigate = useNavigate();
 
     async function ActivateOtp(){
         const Email = email.current?.value.toLowerCase();
         if( !Email || Email.trim()==""){
-            setError("Enter valid email");
+            toast.error("Enter valid email");
             return;
         }
         try{
@@ -23,20 +24,17 @@ export const Signin = () => {
             // email verfiy
             const otpStatus = await SendOtp(Email as string);
             console.log( "OTP Status :",otpStatus.message);
-            alert(`OTP Sent on your Email`);
         
         }catch(e){
             set_otp_field(false);
-            console.log("Activation Otp Errop :");
             if (isAxiosError(e)) {
                 if (e.response && e.response.data && e.response.data.message) {
-                    setError(e.response.data.message);
+                    toast.error(e.response.data.message);
                 } else {
-                    setError("An unexpected API error occurred.");
+                    toast.error("An unexpected API error occurred.");
                 }
             } else {
-                setError("An unexpected error occurred. Please try again.");
-                console.error("An unexpected error:", e);
+                toast.error("An unexpected error occurred. Please try again.");
             }            
         }
 
@@ -46,7 +44,7 @@ export const Signin = () => {
     async function SubmitOTP(){
         const Email = email.current?.value.toLowerCase();
         const Otp = otp.current?.value;
-        if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
+        if(Otp==""||!Otp){toast.error("Enter Valid OTP");return;}
 
         try{
 
@@ -57,26 +55,23 @@ export const Signin = () => {
             localStorage.setItem('token',data.token);
             localStorage.setItem('name',data.name);
             localStorage.setItem('email',data.email);
-            
+            toast.success("Login Successfull");
             navigate("/Dashboard");
         }
         catch(e){
-            console.log("submit otp error");
             // console.error(err);
             if (isAxiosError(e)) {
                 if (e.response && e.response.data && e.response.data.message) {
-                    setError(e.response.data.message);
+                    toast.error(e.response.data.message);
                 } else {
-                    setError("An unexpected API error occurred.");
+                    toast.error("An unexpected API error occurred.");
                 }
             } else {
-                setError("An unexpected error occurred. Please try again.");
-                console.error("An unexpected error:", e);
+                toast.error("An unexpected error occurred. Please try again.");
             }                  
         }
     }
 
-    if(error) setTimeout(()=>{setError("")},3000);
 
 
     return (
@@ -107,7 +102,7 @@ export const Signin = () => {
 
 
                     <div className="flex flex-col mx-1 items-center gap-5">
-                        {error && <div className="bg-red-50 border border-red-500 text-red-900 px-38 py-2  rounded relative" role="alert">{error}</div>}
+                        {/* {error && <div className="bg-red-50 border border-red-500 text-red-900 px-38 py-2  rounded relative" role="alert">{error}</div>} */}
                         <Input_field ref={email} type='email' placeholder='Email Address' size='md' label='Email'/>
                         {/*  */}
                         <div className={otp_field ? 'block':'hidden'}>
@@ -121,8 +116,8 @@ export const Signin = () => {
                         {/*  */}
                         <Button hidden={otp_field} onClick={()=>ActivateOtp()} text="Sign in" size="md"/>
                         <Button hidden={!otp_field} onClick={()=>SubmitOTP()} text="Sign in" size="md"/>
+                    <div className="font-inter mt-4 font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Need an account? <span onClick={() => navigate('/signup')} className="text-[#367AFF] cursor-pointer underline">Create one</span></div>
                     </div>
-                    <div className="font-inter font-normal text-lg leading-[150%] text-center text-[#6C6C6C]">Need an account? <span onClick={() => navigate('/signup')} className="text-[#367AFF] cursor-pointer underline">Create one</span></div>
                 </div>
             </div>
         </div>

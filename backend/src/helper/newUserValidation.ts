@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import z from 'zod';
 import { User } from "../db";
 
-export const Validation = async (name:string,email:string,dob:string ,req:Request,res:Response)=>{
+export const Validation = async (name:string,dob:string,email:string ,req:Request,res:Response)=>{
     if(!dob) {
         return res.status(401).json({message:'please enter your date of birth'});
     }
@@ -36,6 +36,7 @@ export const Validation = async (name:string,email:string,dob:string ,req:Reques
     }
 
     // check user Already Exist or Not
+
     const check = await User.findOne({email});
 
     if(check){
