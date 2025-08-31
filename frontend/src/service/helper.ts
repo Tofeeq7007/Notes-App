@@ -3,7 +3,7 @@ import { CheckOtp, GetOtp } from "../api/auth_api";
 import { isAxiosError } from "axios";
 
     export const SendOtp= async(Email:string)=>{
-        
+        Email = Email.trim().toLowerCase();
         try{
 
             const data = await GetOtp(Email as string);
