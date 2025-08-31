@@ -107,7 +107,7 @@ export const Signup = () => {
 
 
     return (
-        <div className="flex max-md:ml-8 flex-col  items-center h-screen bg-white">
+        <div className="flex max-md:ml-3 flex-col  items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
                     <div className="md:pl-2 flex mt-5 gap-[10px] justify-center md:justify-start w-[343px] md:w-[527px]">
                         <div>

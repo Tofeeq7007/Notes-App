@@ -80,7 +80,7 @@ export const Signin = () => {
 
 
     return (
-        <div className="max-sm:ml-8 flex flex-col   items-center h-screen bg-white">
+        <div className="max-sm:ml-3 flex flex-col   items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
                     <div className="md:pl-2 flex mt-5 gap-[10px] justify-center md:justify-start w-[343px] md:w-[527px]">
                         <div>                    
