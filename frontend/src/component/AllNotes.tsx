@@ -14,7 +14,7 @@ export const AllNotes = () =>{
         queryKey:["content"],
         queryFn: async()=> await GetContent(),
         placeholderData:keepPreviousData,
-        staleTime:Infinity,
+        staleTime:40000,
         enabled:!!token 
     })    
     console.log("data = ",data);

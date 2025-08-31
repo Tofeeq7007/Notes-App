@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteContent } from "../api/content.api";
 import { toast } from "react-toastify";
-
 interface NotesProps{
     key:string
     id: string;
@@ -13,7 +12,7 @@ export const Notes = (props:NotesProps)=>{
     const deleteContentMutation = useMutation({
         mutationFn: (id:string)=>deleteContent(id),
         onSuccess: (data) => {
-        queryClient.invalidateQueries({ queryKey: ["content"] });
+            queryClient.invalidateQueries({queryKey:['content']});
 
             console.log(data);
             toast.success(data.message);

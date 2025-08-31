@@ -1,15 +1,13 @@
 import {  useEffect, useState } from "react"
 import { Button } from "../component/ui/button"
 import { UserInfo } from "../component/UserInfo"
-import { Pop_signout, type eachNotes } from "../component/popup_signout"
+import { Pop_signout } from "../component/popup_signout"
 import { useNavigate } from "react-router-dom"
 import { AllNotes } from "../component/AllNotes"
-import { Notes } from "../component/Notes"
 import { toast } from "react-toastify"
 
 export const Dashboard = () => {
     const [open,onclose] = useState(false);
-    const [notes,setNotes] = useState<eachNotes[]>([]);
     const navigate = useNavigate();
     useEffect(()=>{
         const token = localStorage.getItem("token");
@@ -20,7 +18,7 @@ export const Dashboard = () => {
 
     function logout(){
         localStorage.removeItem("token");
-        toast.success("Logout Successfully");
+        toast.success("Logout Successfully");        
         navigate("/")
     }
 
@@ -39,16 +37,13 @@ export const Dashboard = () => {
             </div>
             {/*  */}
             <UserInfo/>
-            <Pop_signout notes={notes}  setNotes={setNotes} onclose={onclose} open={open} />
+            <Pop_signout onclose={onclose} open={open} />
             <Button onClick={()=>onclose(true)} text={"Create Note"} size="md"/>
             <div className="w-95">
                 <div className="flex  font-inter mt-9 font-medium text-xl leading-[110%] tracking-[-4%]">Notes</div>
                 {/* <Notes text={"Notes 1"} id={"122"}/>
                 <Notes text={"Notes 2"} id={"122"}/> */}
                 <AllNotes/>
-                {notes.map((note)=>(
-                   <Notes key={note.id} text={note.title} id={note.id}/>   
-                ))}
             </div>
 
             {/*  */}
