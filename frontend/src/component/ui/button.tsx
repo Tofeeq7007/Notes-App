@@ -13,6 +13,6 @@ const sizeClass = {
 
 export const Button = (props:ButtonProps)=>{
     return <>
-        <button onClick={props.onClick ? props.onClick : ()=>{}} className={` ${props.hidden && 'hidden'} m-1 font-inter font-semibold transition active:scale-110 text-lg ${sizeClass[props.size]}  bg-[#367AFF] rounded-md p-[16px] text-center text-white  `}>{props.text}</button>
+        <button onClick={props.onClick ? props.onClick : ()=>{}} className={` cursor-pointer ${props.hidden && 'hidden'} m-1 font-inter font-semibold transition active:scale-110 text-lg ${sizeClass[props.size]}  bg-[#367AFF] rounded-md p-[16px] text-center text-white  `}>{props.text}</button>
     </>
 }

@@ -53,7 +53,8 @@ export const Signin = () => {
             const data = await VerifyOTP(Email as string,Otp as string);
 
             console.log("Otp Sahi daala " , data)    
-            localStorage.setItem('token',data.message.token);
+            console.log("Otp Sahi daala " , data.token)    
+            localStorage.setItem('token',data.token);
             
             navigate("/Dashboard");
         }
@@ -77,7 +78,7 @@ export const Signin = () => {
 
 
     return (
-        <div className="flex flex-col  items-center h-screen bg-white">
+        <div className="flex flex-col   items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
                     <div className="md:pl-2 flex mt-5 gap-[10px] justify-center md:justify-start w-[343px] md:w-[527px]">
                         <div>                    
@@ -88,7 +89,7 @@ export const Signin = () => {
                         <div className="font-inter font-semibold text-2xl leading-[110%] tracking-[-4%]">HD</div>
                         
                     </div>
-                    <div className=" md:hidden  flex flex-col sm:items-center md:items-start gap-3">
+                    <div className=" md:hidden absolute  top-35 flex flex-col sm:items-center md:items-start ">
                         <h2 className="font-inter max-md:text-center font-bold text-[40px] leading-[110%] tracking-[-4%]">Sign in</h2>
                         <p className="text-[#969696] max-md:text-center leading-[150%] text-lg font-inter  ">Please login to continue to your account.</p>
                     </div>                    

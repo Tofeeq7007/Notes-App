@@ -1,8 +1,25 @@
-import { Notes } from "../component/Notes"
+import {  useEffect, useState } from "react"
 import { Button } from "../component/ui/button"
 import { UserInfo } from "../component/UserInfo"
+import { Pop_signout } from "../component/popup_signout"
+import { useNavigate } from "react-router-dom"
+import { AllNotes } from "../component/AllNotes"
 
 export const Dashboard = () => {
+    const [open,onclose] = useState(false);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        const token = localStorage.getItem("token");
+        if(!token){
+            navigate("/");
+        }   
+    },[])
+
+    function logout(){
+        localStorage.removeItem("token");
+        navigate("/")
+    }
+
     return (
         <div className=" flex flex-col items-center justify-center">
             <div className="flex justify-between mt-4 gap-2 items-center w-96">
@@ -14,15 +31,17 @@ export const Dashboard = () => {
                     </div>
                     <div className="font-inter font-medium text-xl leading-[110%] tracking-[-4%]">Dashboard</div>
                 </div>
-                <button className="underline text-sm leading-[150%] font-inter text-[#367AFF] font-semibold">Sign out</button>
+                <button onClick={() => logout()} className="underline cursor-pointer text-sm leading-[150%] font-inter text-[#367AFF] font-semibold">Sign out</button>
             </div>
             {/*  */}
             <UserInfo/>
-            <Button text={"Create Note"} size="md"/>
+            <Pop_signout onclose={onclose} open={open} />
+            <Button onClick={()=>onclose(true)} text={"Create Note"} size="md"/>
             <div className="w-98">
                 <div className="flex  font-inter mt-9 font-medium text-xl leading-[110%] tracking-[-4%]">Notes</div>
-                <Notes text={"Notes 1"} id={"122"}/>
-                <Notes text={"Notes 2"} id={"122"}/>
+                {/* <Notes text={"Notes 1"} id={"122"}/>
+                <Notes text={"Notes 2"} id={"122"}/> */}
+                <AllNotes/>
             </div>
 
             {/*  */}

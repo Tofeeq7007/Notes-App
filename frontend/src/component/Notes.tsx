@@ -1,16 +1,36 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteContent } from "../api/content.api";
 
 interface NotesProps{
+    key:string
     id: string;
     text: string;
 }
 export const Notes = (props:NotesProps)=>{
 
+    const queryClient = useQueryClient();     
+    const deleteContentMutation = useMutation({
+        mutationFn: (id:string)=>deleteContent(id),
+        onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["content"] });
+
+            console.log(data);
+            alert(data.message);
+        },
+        onError: (e) => {
+            console.log("Delete mai eeror")
+            console.log(e);
+        },        
+    });    
+
+
     function deleteNote(id:string){
         console.log(id);
+        deleteContentMutation.mutate(id);
     }
 
     
-    return <div className="border-1 rounded-md shadow-[0px_2px_6px_0px_#00000096] flex justify-between p-3 mt-7 mx-1">
+    return <div key={props.key} className="border-1 rounded-md shadow-[0px_2px_6px_0px_#00000096] flex justify-between p-3 mt-7 mx-1">
         <div>{props.text}</div>
         <div onClick={()=>deleteNote(props.id)}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">

@@ -14,9 +14,7 @@ export async function signup(name:string,email:string,dob:string){
 export async function signin(Email:string){
     const response = await axiosInstance.post(`${BACKEND_URL}/auth/signin` , {
         email:Email,
-        // headers: {
-        //     Authorization: localStorage.getItem('token')
-        // }
+
     })
     return response.data
 }

@@ -7,7 +7,7 @@ import { User } from "../db";
 
 export const check_userOK = (req:Request,res:Response,next:NextFunction)=>{
     const token = req.headers["authorization"];
-
+    console.log("AAPKI Request AAYi hai")
     if(!token){
         return res.status(401).json({
             message:"Unauthorized"
@@ -22,6 +22,6 @@ export const check_userOK = (req:Request,res:Response,next:NextFunction)=>{
             message:"decoded is not valid"
         })
     }
-    req.body.user_id = (decoded as JwtPayload).id;
+    req.user_id = (decoded as JwtPayload).id;
     next();
 }

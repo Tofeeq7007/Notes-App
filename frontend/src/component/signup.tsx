@@ -80,7 +80,7 @@ export const Signup = () => {
             const data = await VerifyOTP(Email as string,Otp as string);
 
             console.log("Otp Sahi daala " , data)    
-            localStorage.setItem('token',data.message.token);
+            localStorage.setItem('token',data.token);
             
             navigate("/Dashboard");
         }

@@ -1,3 +1,12 @@
+declare global {
+    namespace Express{
+        export interface Request{
+            user_id?:string;
+        }
+    }
+}
+
+
 import express, { Request, Response } from 'express';
 import { User } from './db';
 import { generateOTP } from './helper/helper';

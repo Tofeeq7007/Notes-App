@@ -3,6 +3,7 @@ import './App.css'
 import { Dashboard } from './Pages/Dashboard'
 import { Auth_signup } from './Pages/auth_signup'
 import { Auth_signin } from './Pages/auth_signin'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // import { Auth_signin } from './Pages/auth_signin'
 // import { Auth_signup } from './Pages/auth_signup'
@@ -24,12 +25,13 @@ function App() {
     }
   ]
   )
+  const queryClient = new QueryClient()
 
   return (
     
-    <>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </>
+    </QueryClientProvider>
   )
 }
 
