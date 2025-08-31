@@ -8,7 +8,7 @@ interface ButtonProps{
 
 const sizeClass = {
     sm: "w-[343px]  h-[52px] ",
-    md: "w-[370px]  h-[59px] md:h-[59px]",
+    md: "w-[343px]  h-[59px] md:h-[59px]",
 }
 
 export const Button = (props:ButtonProps)=>{

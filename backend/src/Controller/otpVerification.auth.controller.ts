@@ -25,6 +25,8 @@ export const verify_otp = async (req:Request,res:Response)=>{
 
     res.json({
         message:"OTP Verified",
+        name:check.name,
+        email:check.email,
         token:token
     }
     )

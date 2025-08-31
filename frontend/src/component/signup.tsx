@@ -17,7 +17,7 @@ export const Signup = () => {
     const navigate = useNavigate();
 
     async function ActivateOtp(){
-        const Email = emailRef.current?.value;
+        const Email = emailRef.current?.value.toLowerCase();
         const dob = dobRef.current?.value;
         const name = nameRef.current?.value;
         if( !Email || Email.trim()=="" || !name || name.trim()=="" || !dob || dob.trim() == "" ){
@@ -71,7 +71,7 @@ export const Signup = () => {
 
     }
     async function SubmitOTP(){
-        const Email = emailRef.current?.value;
+        const Email = emailRef.current?.value.toLowerCase();
         const Otp = otp.current?.value;
         if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
 
@@ -81,7 +81,8 @@ export const Signup = () => {
 
             console.log("Otp Sahi daala " , data)    
             localStorage.setItem('token',data.token);
-            
+            localStorage.setItem('name',data.name);
+            localStorage.setItem('email',data.email);            
             navigate("/Dashboard");
         }
         catch(e){
@@ -106,7 +107,7 @@ export const Signup = () => {
 
 
     return (
-        <div className="flex flex-col  items-center h-screen bg-white">
+        <div className="flex max-md:ml-8 flex-col  items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
                     <div className="md:pl-2 flex mt-5 gap-[10px] justify-center md:justify-start w-[343px] md:w-[527px]">
                         <div>

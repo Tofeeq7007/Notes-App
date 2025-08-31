@@ -22,7 +22,7 @@ export const Dashboard = () => {
 
     return (
         <div className=" flex flex-col items-center justify-center">
-            <div className="flex justify-between mt-4 gap-2 items-center w-96">
+            <div className="flex justify-between mt-4 gap-2 items-center w-95">
                 <div className="flex justify-between gap-4 items-center">
                     <div className="">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-8 text-[#367AFF]">
@@ -37,7 +37,7 @@ export const Dashboard = () => {
             <UserInfo/>
             <Pop_signout onclose={onclose} open={open} />
             <Button onClick={()=>onclose(true)} text={"Create Note"} size="md"/>
-            <div className="w-98">
+            <div className="w-95">
                 <div className="flex  font-inter mt-9 font-medium text-xl leading-[110%] tracking-[-4%]">Notes</div>
                 {/* <Notes text={"Notes 1"} id={"122"}/>
                 <Notes text={"Notes 2"} id={"122"}/> */}

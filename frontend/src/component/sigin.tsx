@@ -13,7 +13,7 @@ export const Signin = () => {
     const navigate = useNavigate();
 
     async function ActivateOtp(){
-        const Email = email.current?.value;
+        const Email = email.current?.value.toLowerCase();
         if( !Email || Email.trim()==""){
             setError("Enter valid email");
             return;
@@ -44,7 +44,7 @@ export const Signin = () => {
 
 
     async function SubmitOTP(){
-        const Email = email.current?.value;
+        const Email = email.current?.value.toLowerCase();
         const Otp = otp.current?.value;
         if(Otp==""||!Otp){setError("Enter Valid OTP");return;}
 
@@ -55,6 +55,8 @@ export const Signin = () => {
             console.log("Otp Sahi daala " , data)    
             console.log("Otp Sahi daala " , data.token)    
             localStorage.setItem('token',data.token);
+            localStorage.setItem('name',data.name);
+            localStorage.setItem('email',data.email);
             
             navigate("/Dashboard");
         }
@@ -78,7 +80,7 @@ export const Signin = () => {
 
 
     return (
-        <div className="flex flex-col   items-center h-screen bg-white">
+        <div className="max-sm:ml-8 flex flex-col   items-center h-screen bg-white">
                 <div className="flex flex-col gap-22">
                     <div className="md:pl-2 flex mt-5 gap-[10px] justify-center md:justify-start w-[343px] md:w-[527px]">
                         <div>                    
