@@ -26,3 +26,8 @@ Got Frontend Folder  And run Commant given Below
 
 
 ## Now you Project Start you  see on
+
+
+</br>
+
+# Your Project Only run when you define .env file in Both Frontend and Backend
